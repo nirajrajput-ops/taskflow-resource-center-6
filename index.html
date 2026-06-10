@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow Resource Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inconsolata:wght@300;400;500;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+  (function(apiKey){
+      (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
+      v=['initialize','identify','updateOptions','pageLoad','track', 'trackAgent'];for(w=0,x=v.length;w<x;++w)(function(m){
+      o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
+      y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo-dev.pendo-dev.com/agent/static/'+apiKey+'/pendo.js';
+      z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
+  })('efd4e767-214f-45c1-9b99-2a43d2b11339');
+
+  pendo.initialize({
+    visitor: {
+      id: ''
+    }
+  });
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080A10;
+      --sidebar:     #0B0D16;
+      --surface:     #0F1221;
+      --surface2:    #141828;
+      --border:      rgba(255,255,255,0.06);
+      --border-hi:   rgba(166,255,0,0.22);
+      --text:        #DCE4F5;
+      --muted:       #5C6B88;
+      --dim:         #2E3B52;
+      --accent:      #A6FF00;
+      --accent-dim:  rgba(166,255,0,0.09);
+      --warn:        #FF8F00;
+      --warn-dim:    rgba(255,143,0,0.1);
+      --info:        #38BDF8;
+      --info-dim:    rgba(56,189,248,0.1);
+      --danger:      #FF4444;
+      --danger-dim:  rgba(255,68,68,0.09);
+      --success:     #00E5A0;
+      --success-dim: rgba(0,229,160,0.09);
+      --r:           10px;
+      --r-lg:        16px;
+      --sidebar-w:   260px;
+      --header-h:    58px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+    /* ══════════════════════════════ HEADER ══ */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: rgba(8,10,16,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 24px;
+      gap: 20px;
+      z-index: 200;
+    }
+    .header-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Jost', sans-serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--text); text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .header-logo-mark {
+      width: 28px; height: 28px; border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), #5FE000);
+      display: grid; place-items: center;
+      font-size: 14px; color: #000;
+    }
+    .header-divider {
+      width: 1px; height: 24px; background: var(--border);
+      flex-shrink: 0;
+    }
+    .header-title {
+      font-size: 13px; color: var(--muted); font-weight: 500;
+      flex-shrink: 0;
+    }
+    .header-search {
+      flex: 1; max-width: 440px; margin-left: auto;
+      position: relative;
+    }
+    .header-search input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 8px 14px 8px 36px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px; color: var(--text);
+      outline: none; transition: border-color 0.2s;
+    }
+    .header-search input:focus { border-color: var(--border-hi); }
+    .header-search input::placeholder { color: var(--muted); }
+    .search-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); pointer-events: none;
+      font-size: 13px;
+    }
+    .hamburger {
+      display: none;
+      background: none; border: none; cursor: pointer;
+      color: var(--text); padding: 6px; margin-left: auto;
+    }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; flex-direction: column; gap: 4px; }
+      .hamburger span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 1px; transition: all 0.2s; }
+      .header-search { display: none; }
+      .header-title { display: none; }
+    }
+
+    /* ══════════════════════════════ LAYOUT ══ */
+    .layout {
+      display: flex;
+      padding-top: var(--header-h);
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════ SIDEBAR ══ */
+    aside {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: var(--header-h);
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      padding: 24px 12px 40px;
+      transition: transform 0.3s;
+      z-index: 100;
+    }
+    aside.closed { transform: translateX(-100%); }
+
+    .nav-group { margin-bottom: 8px; }
+    .nav-group-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--dim); padding: 10px 12px 6px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 12px; border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+      color: var(--muted);
+      cursor: pointer; transition: all 0.15s;
+      text-decoration: none;
+      margin-bottom: 1px;
+    }
+    .nav-item:hover { background: var(--surface); color: var(--text); }
+    .nav-item.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid var(--border-hi);
+    }
+    .nav-item .nav-icon { font-size: 14px; width: 18px; flex-shrink: 0; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--surface2);
+      color: var(--muted);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 10px; font-weight: 600;
+      font-family: 'Inconsolata', monospace;
+    }
+    .nav-item.active .nav-badge { background: rgba(166,255,0,0.12); color: var(--accent); }
+
+    @media (max-width: 768px) {
+      aside { transform: translateX(-100%); }
+      aside.open { transform: translateX(0); }
+    }
+
+    /* Sidebar overlay on mobile */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+    .overlay.visible { display: block; }
+
+    /* ══════════════════════════════ MAIN CONTENT ══ */
+    main {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      min-width: 0;
+      padding: 48px clamp(24px,4vw,72px) 100px;
+      max-width: calc(900px + var(--sidebar-w));
+    }
+    @media (max-width: 768px) {
+      main { margin-left: 0; padding: 32px 20px 80px; }
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 32px; font-weight: 500;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb-sep { color: var(--dim); }
+
+    /* ── Page header ── */
+    .page-header { margin-bottom: 40px; }
+    .page-header .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent);
+      font-family: 'Inconsolata', monospace;
+      margin-bottom: 14px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 600; line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .page-title em { font-style: italic; color: var(--accent); }
+    .page-desc {
+      font-size: 16px; color: var(--muted);
+      line-height: 1.75; max-width: 580px;
+      font-weight: 400;
+    }
+    .page-meta {
+      display: flex; align-items: center; gap: 16px;
+      margin-top: 20px;
+    }
+    .page-meta-item {
+      font-size: 12px; color: var(--dim);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* ── Divider ── */
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    /* ── Section heading ── */
+    h2.sh {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 600;
+      letter-spacing: -0.01em; color: var(--text);
+      margin-bottom: 14px; margin-top: 48px;
+    }
+    h2.sh:first-child { margin-top: 0; }
+    h3.sh3 {
+      font-family: 'Jost', sans-serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--text); margin-bottom: 10px; margin-top: 32px;
+    }
+    p.body-text {
+      color: var(--muted); line-height: 1.8;
+      margin-bottom: 16px; font-weight: 400;
+    }
+    p.body-text strong { color: var(--text); font-weight: 600; }
+
+    /* ── Quick links grid ── */
+    .ql-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .ql-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .ql-card:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .ql-icon { font-size: 24px; margin-bottom: 12px; }
+    .ql-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .ql-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+    @media (max-width: 640px) { .ql-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 400px) { .ql-grid { grid-template-columns: 1fr; } }
+
+    /* ── Callouts ── */
+    .callout {
+      border-radius: var(--r);
+      padding: 16px 18px;
+      margin: 20px 0;
+      border-left: 3px solid;
+      display: flex; gap: 12px;
+    }
+    .callout-tip   { background: var(--success-dim); border-color: var(--success); }
+    .callout-note  { background: var(--info-dim);    border-color: var(--info);    }
+    .callout-warn  { background: var(--warn-dim);    border-color: var(--warn);    }
+    .callout-danger{ background: var(--danger-dim);  border-color: var(--danger);  }
+    .callout-icon  { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .callout-body  {}
+    .callout-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .callout-tip   .callout-title { color: var(--success); }
+    .callout-note  .callout-title { color: var(--info);    }
+    .callout-warn  .callout-title { color: var(--warn);    }
+    .callout-danger .callout-title { color: var(--danger); }
+    .callout-text  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    .callout-text strong { color: var(--text); }
+
+    /* ── Code blocks ── */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin: 16px 0;
+      position: relative;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 16px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang {
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px; color: var(--dim);
+      font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .copy-btn {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px; font-weight: 600;
+      color: var(--muted); background: none;
+      border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 5px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    pre {
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Inconsolata', monospace;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    code {
+      font-family: 'Inconsolata', monospace;
+      font-size: 13px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 4px;
+      color: var(--accent);
+    }
+
+    /* ── Command cards ── */
+    .cmd-grid {
+      display: flex; flex-direction: column; gap: 8px;
+      margin: 20px 0;
+    }
+    .cmd-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      transition: border-color 0.15s;
+    }
+    .cmd-card:hover { border-color: var(--border-hi); }
+    .cmd-pattern {
+      font-family: 'Inconsolata', monospace;
+      font-size: 13.5px; color: var(--accent);
+      margin-bottom: 5px; font-weight: 500;
+    }
+    .cmd-example {
+      font-size: 12px; color: var(--muted);
+      font-style: italic;
+    }
+    .cmd-intent {
+      font-family: 'Inconsolata', monospace;
+      font-size: 10px; font-weight: 600;
+      padding: 3px 8px; border-radius: 5px;
+      background: var(--surface2);
+      color: var(--dim);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      align-self: start;
+    }
+
+    /* ── Reference table ── */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13.5px;
+    }
+    .ref-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .ref-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      vertical-align: top;
+    }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table tr:hover td { background: var(--surface); }
+    .ref-table td:first-child { color: var(--text); font-weight: 500; }
+    .ref-table td code { font-size: 12px; }
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin: 16px 0;
+    }
+
+    /* ── Steps ── */
+    .steps { margin: 24px 0; }
+    .step {
+      display: flex; gap: 20px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 19px; top: 46px;
+      width: 2px;
+      height: calc(100% - 10px);
+      background: var(--border);
+    }
+    .step-num {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--border-hi);
+      display: grid; place-items: center;
+      font-family: 'Inconsolata', monospace;
+      font-size: 14px; font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0; z-index: 1;
+    }
+    .step-body { flex: 1; padding-top: 6px; }
+    .step-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .step-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+    /* ── Feature list ── */
+    .feat-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+      margin: 12px 0 20px;
+    }
+    .feat-list li {
+      display: flex; gap: 10px;
+      font-size: 14px; color: var(--muted);
+    }
+    .feat-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-family: 'Inconsolata', monospace;
+    }
+    .feat-list li strong { color: var(--text); }
+
+    /* ── Tags/badges ── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600;
+      font-family: 'Inconsolata', monospace;
+      letter-spacing: 0.02em;
+    }
+    .badge-high    { background: rgba(255,68,68,0.12);    color: #FF6B6B; }
+    .badge-medium  { background: rgba(255,143,0,0.12);    color: #FF9F00; }
+    .badge-low     { background: rgba(0,229,160,0.12);    color: var(--success); }
+    .badge-done    { background: rgba(0,229,160,0.1);     color: var(--success); }
+    .badge-pending { background: rgba(56,189,248,0.12);   color: var(--info); }
+    .badge-overdue { background: rgba(255,68,68,0.1);     color: var(--danger); }
+    .badge-new     { background: rgba(166,255,0,0.1);     color: var(--accent); }
+
+    /* ── FAQ Accordion ── */
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 8px;
+      transition: border-color 0.2s;
+    }
+    .faq-item.open { border-color: var(--border-hi); }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px;
+      cursor: pointer;
+      font-size: 14px; font-weight: 600; color: var(--text);
+      gap: 16px;
+    }
+    .faq-chevron {
+      color: var(--muted); transition: transform 0.25s; flex-shrink: 0;
+      font-size: 12px;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--accent); }
+    .faq-a {
+      display: none;
+      padding: 0 18px 16px;
+      font-size: 13.5px; color: var(--muted);
+      line-height: 1.75;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+    .faq-item.open .faq-a { display: block; }
+    .faq-a code { font-size: 12px; }
+
+    /* ── Changelog entry ── */
+    .changelog-entry {
+      border-left: 2px solid var(--border-hi);
+      padding-left: 20px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .changelog-entry::before {
+      content: '';
+      position: absolute;
+      left: -5px; top: 8px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .changelog-version {
+      font-family: 'Inconsolata', monospace;
+      font-size: 20px; font-weight: 600;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .changelog-date {
+      font-size: 12px; color: var(--muted); margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .changelog-section-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin: 14px 0 8px;
+    }
+    .changelog-section-label.new    { color: var(--success); }
+    .changelog-section-label.improved { color: var(--info); }
+    .changelog-section-label.fixed  { color: var(--warn); }
+    .changelog-list {
+      list-style: none; display: flex; flex-direction: column; gap: 6px;
+    }
+    .changelog-list li {
+      font-size: 13.5px; color: var(--muted);
+      display: flex; gap: 8px;
+    }
+    .changelog-list li::before { content: '·'; color: var(--dim); flex-shrink: 0; }
+    .changelog-list li strong { color: var(--text); }
+
+    /* ── Search results ── */
+    #search-results {
+      display: none;
+      position: absolute; top: calc(var(--header-h) + 4px);
+      left: 50%; transform: translateX(-50%);
+      width: min(500px, 90vw);
+      background: var(--surface);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--r-lg);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      z-index: 300;
+      overflow: hidden;
+    }
+    #search-results.visible { display: block; }
+    .sr-header {
+      padding: 10px 16px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .sr-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sr-item:hover { background: var(--surface2); }
+    .sr-icon { font-size: 14px; width: 20px; }
+    .sr-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .sr-section { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .sr-no-results {
+      padding: 20px 16px; font-size: 13px; color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── Interface tour ── */
+    .ui-map {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      margin: 20px 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .ui-zone {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px;
+    }
+    .ui-zone-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 8px;
+      font-family: 'Inconsolata', monospace;
+    }
+    .ui-zone-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+    @media (max-width: 520px) {
+      .ui-map { grid-template-columns: 1fr; }
+    }
+
+    /* ── Priority table visual ── */
+    .priority-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px; margin: 20px 0;
+    }
+    .priority-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+    }
+    .priority-card.high   { border-top: 3px solid #FF6B6B; }
+    .priority-card.medium { border-top: 3px solid #FF9F00; }
+    .priority-card.low    { border-top: 3px solid var(--success); }
+    .priority-card-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .priority-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+    @media (max-width: 520px) {
+      .priority-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Back to top ── */
+    #back-top {
+      position: fixed; bottom: 28px; right: 28px;
+      width: 40px; height: 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: none; place-items: center;
+      cursor: pointer; color: var(--muted);
+      transition: border-color 0.2s, color 0.2s;
+      font-size: 16px; z-index: 50;
+    }
+    #back-top:hover { border-color: var(--border-hi); color: var(--accent); }
+    #back-top.visible { display: grid; }
+
+    /* ── Inline highlight ── */
+    .hl { color: var(--accent); font-weight: 600; }
+    .hl-info   { color: var(--info); }
+    .hl-warn   { color: var(--warn); }
+    .hl-danger { color: var(--danger); }
+
+    /* ── Section sub-nav ── */
+    .on-this-page {
+      position: fixed;
+      top: calc(var(--header-h) + 40px);
+      right: 40px;
+      width: 180px;
+      display: none;
+    }
+    @media (min-width: 1200px) { .on-this-page { display: block; } }
+    .otp-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 10px;
+    }
+    .otp-link {
+      display: block;
+      font-size: 12px; color: var(--muted);
+      text-decoration: none; padding: 4px 0;
+      border-left: 2px solid var(--border);
+      padding-left: 10px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .otp-link:hover { color: var(--text); border-color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ HEADER ══ -->
+<header class="header">
+  <a href="#" class="header-logo" onclick="navigate('home')">
+    <span class="header-logo-mark">⚡</span>
+    TaskFlow
+  </a>
+  <div class="header-divider"></div>
+  <span class="header-title">Resource Center</span>
+  <div class="header-search">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="search-input" placeholder="Search documentation…" autocomplete="off" />
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- Search results dropdown -->
+<div id="search-results"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+
+<!-- ══════════════════════════════════════════ LAYOUT ══ -->
+<div class="layout">
+
+  <!-- ══════════════════════════════════════ SIDEBAR ══ -->
+  <aside id="sidebar">
+
+    <div class="nav-group">
+      <div class="nav-group-label">Start here</div>
+      <a class="nav-item active" onclick="navigate('home')" href="#">
+        <span class="nav-icon">🏠</span> Home
+      </a>
+      <a class="nav-item" onclick="navigate('getting-started')" href="#">
+        <span class="nav-icon">🚀</span> Getting Started
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">AI Assistant</div>
+      <a class="nav-item" onclick="navigate('ai-overview')" href="#">
+        <span class="nav-icon">🤖</span> How It Works
+      </a>
+      <a class="nav-item" onclick="navigate('command-reference')" href="#">
+        <span class="nav-icon">📋</span> Command Reference <span class="nav-badge">15+</span>
+      </a>
+      <a class="nav-item" onclick="navigate('date-parsing')" href="#">
+        <span class="nav-icon">📅</span> Dates &amp; Times
+      </a>
+      <a class="nav-item" onclick="navigate('context-memory')" href="#">
+        <span class="nav-icon">🧠</span> Context Memory
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Features</div>
+      <a class="nav-item" onclick="navigate('tasks')" href="#">
+        <span class="nav-icon">✓</span> Tasks
+      </a>
+      <a class="nav-item" onclick="navigate('categories')" href="#">
+        <span class="nav-icon">🏷️</span> Categories
+      </a>
+      <a class="nav-item" onclick="navigate('dashboard')" href="#">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a class="nav-item" onclick="navigate('reminders')" href="#">
+        <span class="nav-icon">🔔</span> Reminders
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Reference</div>
+      <a class="nav-item" onclick="navigate('faq')" href="#">
+        <span class="nav-icon">❓</span> FAQ
+      </a>
+      <a class="nav-item" onclick="navigate('troubleshooting')" href="#">
+        <span class="nav-icon">🔧</span> Troubleshooting
+      </a>
+      <a class="nav-item" onclick="navigate('changelog')" href="#">
+        <span class="nav-icon">📝</span> Changelog <span class="nav-badge">v1.0</span>
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- ══════════════════════════════════════ MAIN ══ -->
+  <main id="main-content">
+
+    <!-- ══════════════════════ PAGE: HOME ══ -->
+    <div class="page active" id="page-home">
+      <div class="page-header">
+        <div class="tag">// resource center</div>
+        <h1 class="page-title">TaskFlow <em>Documentation</em></h1>
+        <p class="page-desc">Everything you need to master TaskFlow — from first task to advanced AI commands. Find answers fast, or explore deeply.</p>
+        <div class="page-meta">
+          <span class="page-meta-item">⚡ AI-native</span>
+          <span class="page-meta-item">· Fully client-side</span>
+          <span class="page-meta-item">· React + TypeScript</span>
+        </div>
+      </div>
+
+      <div class="ql-grid">
+        <a class="ql-card" onclick="navigate('getting-started')" href="#">
+          <div class="ql-icon">🚀</div>
+          <div class="ql-title">Getting Started</div>
+          <div class="ql-desc">New to TaskFlow? Start here. Up and running in under 2 minutes.</div>
+        </a>
+        <a class="ql-card" onclick="navigate('command-reference')" href="#">
+          <div class="ql-icon">📋</div>
+          <div class="ql-title">Command Reference</div>
+          <div class="ql-desc">Complete list of all 15+ AI commands with patterns and examples.</div>
+        </a>
+        <a class="ql-card" onclick="navigate('ai-overview')" href="#">
+          <div class="ql-icon">🤖</div>
+          <div class="ql-title">AI Assistant Guide</div>
+          <div class="ql-desc">Learn how the natural language engine understands your commands.</div>
+        </a>
+        <a class="ql-card" onclick="navigate('tasks')" href="#">
+          <div class="ql-icon">✓</div>
+          <div class="ql-title">Tasks Guide</div>
+          <div class="ql-desc">Everything about creating, editing, and managing your tasks.</div>
+        </a>
+        <a class="ql-card" onclick="navigate('faq')" href="#">
+          <div class="ql-icon">❓</div>
+          <div class="ql-title">FAQ</div>
+          <div class="ql-desc">Answers to the most frequently asked questions about TaskFlow.</div>
+        </a>
+        <a class="ql-card" onclick="navigate('changelog')" href="#">
+          <div class="ql-icon">📝</div>
+          <div class="ql-title">Changelog</div>
+          <div class="ql-desc">What's new, what's improved, and what's been fixed in each release.</div>
+        </a>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">What is TaskFlow?</h2>
+      <p class="body-text">TaskFlow is a <strong>fully client-side task management application</strong> built with React, TypeScript, and Tailwind CSS. Unlike most task managers, TaskFlow includes a built-in AI assistant that understands natural language commands — no cloud API, no subscription, no sign-up.</p>
+      <p class="body-text">All your data lives in your browser's <strong>localStorage</strong>. Nothing is sent to any server. The AI runs entirely locally using a custom NLP parser and intent executor built into the app.</p>
+
+      <ul class="feat-list">
+        <li><strong>Conversational AI</strong> — create, update, complete, and query tasks by typing plain English</li>
+        <li><strong>Multi-thread conversations</strong> — separate AI contexts for Work, Personal, and more</li>
+        <li><strong>Full CRUD</strong> — tasks with subtasks, priorities, due dates, times, and reminders</li>
+        <li><strong>Color-coded categories</strong> — 5 built-in plus unlimited custom ones</li>
+        <li><strong>Live dashboard</strong> — real-time stats across all your tasks</li>
+        <li><strong>Zero backend</strong> — 100% private, runs in any modern browser</li>
+      </ul>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <div class="callout-title">Pro tip</div>
+          <div class="callout-text">The fastest way to learn TaskFlow is to open the AI assistant and type <code>help</code>. It will show you everything it can do.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: GETTING STARTED ══ -->
+    <div class="page" id="page-getting-started">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Getting Started
+      </div>
+      <div class="page-header">
+        <div class="tag">// getting started</div>
+        <h1 class="page-title">Up and running <em>fast.</em></h1>
+        <p class="page-desc">TaskFlow requires no installation, no account, and no setup. Open the app and you're ready.</p>
+      </div>
+
+      <h2 class="sh">Quick Start</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Open the App</div>
+            <div class="step-desc">Navigate to <code>localhost:5173</code> (or wherever TaskFlow is running). You'll see the Dashboard with 5 default categories already set up and ready to use.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Open the AI Assistant</div>
+            <div class="step-desc">Look for the floating <span class="hl">⚡ button</span> in the bottom-right corner of any page. Click it to open the chat panel. The assistant is context-aware — it knows which tasks and categories exist.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Create Your First Task</div>
+            <div class="step-desc">Type a natural command into the chat input. Try: <code>Add high priority task "Plan my week" due tomorrow</code>. The task will appear immediately in your task list.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Explore the Interface</div>
+            <div class="step-desc">Use the sidebar to navigate between Dashboard, Tasks, and Categories. All your tasks sync instantly across views — there's no save button needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Interface Overview</h2>
+      <p class="body-text">TaskFlow has four main areas:</p>
+
+      <div class="ui-map">
+        <div class="ui-zone">
+          <div class="ui-zone-label">Sidebar</div>
+          <div class="ui-zone-desc">Navigation between Dashboard, Tasks, and Categories. Also shows your category list with live task counts.</div>
+        </div>
+        <div class="ui-zone">
+          <div class="ui-zone-label">Dashboard</div>
+          <div class="ui-zone-desc">Stats summary (total, completed, pending, overdue), quick-add form, and a list of recent pending tasks.</div>
+        </div>
+        <div class="ui-zone">
+          <div class="ui-zone-label">Tasks Page</div>
+          <div class="ui-zone-desc">Full task list with filter chips (All, Pending, Completed, Overdue), sort controls, and search bar.</div>
+        </div>
+        <div class="ui-zone">
+          <div class="ui-zone-label">AI Chat (floating)</div>
+          <div class="ui-zone-desc">Floating panel accessible from any page. Supports multiple named threads, each with independent context memory.</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Your First 5 Commands</h2>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">Add task "Buy groceries" due tomorrow</div>
+            <div class="cmd-example">Creates a task with tomorrow's date</div>
+          </div>
+          <span class="cmd-intent">CREATE</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">Show all pending tasks</div>
+            <div class="cmd-example">Lists tasks you haven't completed yet</div>
+          </div>
+          <span class="cmd-intent">LIST</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">Complete the first task</div>
+            <div class="cmd-example">Marks task #1 from the last list as done</div>
+          </div>
+          <span class="cmd-intent">COMPLETE</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">Show my stats</div>
+            <div class="cmd-example">Summary of all task counts and completion rate</div>
+          </div>
+          <span class="cmd-intent">STATS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">Help</div>
+            <div class="cmd-example">Shows a list of everything the AI can do</div>
+          </div>
+          <span class="cmd-intent">HELP</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: AI OVERVIEW ══ -->
+    <div class="page" id="page-ai-overview">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        AI Assistant
+      </div>
+      <div class="page-header">
+        <div class="tag">// ai assistant</div>
+        <h1 class="page-title">How the AI <em>works.</em></h1>
+        <p class="page-desc">TaskFlow's AI runs entirely in your browser — no API calls, no cloud, no latency. Here's what's happening under the hood.</p>
+      </div>
+
+      <h2 class="sh">Architecture</h2>
+      <p class="body-text">The AI system has two distinct layers:</p>
+
+      <div class="ui-map" style="grid-template-columns: 1fr; gap: 12px;">
+        <div class="ui-zone">
+          <div class="ui-zone-label">1. Parser — <code>src/agent/parser.ts</code></div>
+          <div class="ui-zone-desc">Converts your plain-English input into a structured <strong>command object</strong>: intent type, task title, priority, due date, category, reminder interval, and any referenced entities. Uses regex-based pattern matching and keyword detection with multi-pass entity extraction.</div>
+        </div>
+        <div class="ui-zone">
+          <div class="ui-zone-label">2. Executor — <code>src/agent/executor.ts</code></div>
+          <div class="ui-zone-desc">Takes the command object and executes it against your live task context. Handles 15+ intent types. Supports <strong>fuzzy matching</strong> (exact → starts-with → contains) for task and category lookups. Updates state via React context and returns a formatted response.</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Supported Intents</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead>
+            <tr><th>Intent</th><th>What it does</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>CREATE_TASK</code></td><td>Creates a new task with extracted fields</td></tr>
+            <tr><td><code>COMPLETE_TASK</code></td><td>Marks a task as completed</td></tr>
+            <tr><td><code>UNCOMPLETE_TASK</code></td><td>Marks a completed task as pending again</td></tr>
+            <tr><td><code>DELETE_TASK</code></td><td>Permanently removes a task</td></tr>
+            <tr><td><code>UPDATE_TASK</code></td><td>Updates title, priority, or due date of a task</td></tr>
+            <tr><td><code>LIST_TASKS</code></td><td>Returns a filtered/sorted list of tasks</td></tr>
+            <tr><td><code>SHOW_STATS</code></td><td>Returns task statistics and completion rate</td></tr>
+            <tr><td><code>ADD_SUBTASK</code></td><td>Adds a subtask to an existing task</td></tr>
+            <tr><td><code>COMPLETE_SUBTASK</code></td><td>Marks a subtask as done</td></tr>
+            <tr><td><code>CREATE_CATEGORY</code></td><td>Creates a new task category</td></tr>
+            <tr><td><code>RENAME_CATEGORY</code></td><td>Renames an existing category</td></tr>
+            <tr><td><code>DELETE_CATEGORY</code></td><td>Removes a category (tasks are uncategorized)</td></tr>
+            <tr><td><code>LIST_CATEGORIES</code></td><td>Lists all categories with task counts</td></tr>
+            <tr><td><code>HELP</code></td><td>Shows available commands and usage tips</td></tr>
+            <tr><td><code>UNKNOWN</code></td><td>Graceful fallback with suggestions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Multi-Thread Conversations</h2>
+      <p class="body-text">The AI supports multiple named conversation threads. Each thread maintains its own context independently — so what you're discussing in your "Work" thread doesn't bleed into your "Personal" thread.</p>
+
+      <ul class="feat-list">
+        <li>Click <strong>+ New thread</strong> to create a separate conversation context</li>
+        <li>Rename threads by clicking on the thread name</li>
+        <li>Switch threads without losing context in either</li>
+        <li>Delete threads to clear their conversation history</li>
+        <li>Thread conversations persist across page refreshes via localStorage</li>
+      </ul>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body">
+          <div class="callout-title">Note</div>
+          <div class="callout-text">Context references like "it" or "the first one" only work <strong>within the same thread</strong>. Switching threads resets what the AI considers the "last mentioned" task.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: COMMAND REFERENCE ══ -->
+    <div class="page" id="page-command-reference">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        AI Assistant
+        <span class="breadcrumb-sep">›</span>
+        Command Reference
+      </div>
+      <div class="page-header">
+        <div class="tag">// command reference</div>
+        <h1 class="page-title">All <em>15+</em> commands.</h1>
+        <p class="page-desc">Complete reference of every command the AI understands. Commands are flexible — you don't need to match patterns exactly.</p>
+      </div>
+
+      <h2 class="sh">Task Commands</h2>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">add/create task "[title]"</div>
+            <div class="cmd-example">"Add task Buy coffee" · "Create task Meeting notes"</div>
+          </div>
+          <span class="cmd-intent">CREATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">add [high/medium/low] priority task "[title]"</div>
+            <div class="cmd-example">"Add high priority task Submit report"</div>
+          </div>
+          <span class="cmd-intent">CREATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">add task "[title]" due [date]</div>
+            <div class="cmd-example">"Add task Review PR due tomorrow" · "…due next Monday"</div>
+          </div>
+          <span class="cmd-intent">CREATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">add task "[title]" in [category]</div>
+            <div class="cmd-example">"Add task Buy milk in Shopping"</div>
+          </div>
+          <span class="cmd-intent">CREATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">add task "[title]" remind me [interval] before</div>
+            <div class="cmd-example">"Add task Team standup remind me 15 minutes before"</div>
+          </div>
+          <span class="cmd-intent">CREATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">complete/mark done [task reference]</div>
+            <div class="cmd-example">"Complete Buy coffee" · "Mark done #1" · "Mark it done"</div>
+          </div>
+          <span class="cmd-intent">COMPLETE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">mark [task] as incomplete/pending/undone</div>
+            <div class="cmd-example">"Mark Buy coffee as incomplete"</div>
+          </div>
+          <span class="cmd-intent">UNCOMPLETE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">delete/remove [task reference]</div>
+            <div class="cmd-example">"Delete Buy coffee" · "Remove task #2"</div>
+          </div>
+          <span class="cmd-intent">DELETE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">rename "[title]" to "[new title]"</div>
+            <div class="cmd-example">"Rename Buy coffee to Buy espresso"</div>
+          </div>
+          <span class="cmd-intent">UPDATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">change priority of [task] to [priority]</div>
+            <div class="cmd-example">"Change priority of Submit report to high"</div>
+          </div>
+          <span class="cmd-intent">UPDATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">change due date of [task] to [date]</div>
+            <div class="cmd-example">"Change due date of Submit report to Friday"</div>
+          </div>
+          <span class="cmd-intent">UPDATE_TASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">add subtask "[subtask title]" to [task]</div>
+            <div class="cmd-example">"Add subtask Buy oat milk to Buy groceries"</div>
+          </div>
+          <span class="cmd-intent">ADD_SUBTASK</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">complete subtask "[title]" of [task]</div>
+            <div class="cmd-example">"Complete subtask Buy oat milk of Buy groceries"</div>
+          </div>
+          <span class="cmd-intent">COMPLETE_SUBTASK</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Query Commands</h2>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show/list all tasks</div>
+            <div class="cmd-example">"Show all tasks" · "List everything"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show pending/incomplete tasks</div>
+            <div class="cmd-example">"Show pending tasks" · "What's not done?"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show completed/done tasks</div>
+            <div class="cmd-example">"Show completed tasks" · "What did I finish?"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show overdue tasks</div>
+            <div class="cmd-example">"Show overdue tasks" · "What am I late on?"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show [priority] priority tasks</div>
+            <div class="cmd-example">"Show high priority tasks" · "List low priority"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show tasks in [category]</div>
+            <div class="cmd-example">"Show tasks in Work" · "List Shopping tasks"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show tasks due today/tomorrow/this week</div>
+            <div class="cmd-example">"What's due today?" · "Show tasks due this week"</div>
+          </div>
+          <span class="cmd-intent">LIST_TASKS</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Category Commands</h2>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">create/add category "[name]"</div>
+            <div class="cmd-example">"Create category Finance" · "Add category Travel"</div>
+          </div>
+          <span class="cmd-intent">CREATE_CATEGORY</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">rename category "[old]" to "[new]"</div>
+            <div class="cmd-example">"Rename category Work to Professional"</div>
+          </div>
+          <span class="cmd-intent">RENAME_CATEGORY</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">delete/remove category "[name]"</div>
+            <div class="cmd-example">"Delete category Shopping"</div>
+          </div>
+          <span class="cmd-intent">DELETE_CATEGORY</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show/list categories</div>
+            <div class="cmd-example">"Show categories" · "List all my categories"</div>
+          </div>
+          <span class="cmd-intent">LIST_CATEGORIES</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Meta Commands</h2>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">show stats / show summary / how am I doing</div>
+            <div class="cmd-example">"Show my stats" · "Give me a summary"</div>
+          </div>
+          <span class="cmd-intent">SHOW_STATS</span>
+        </div>
+        <div class="cmd-card">
+          <div>
+            <div class="cmd-pattern">help / what can you do</div>
+            <div class="cmd-example">"Help" · "What commands do you support?"</div>
+          </div>
+          <span class="cmd-intent">HELP</span>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <div class="callout-title">Commands are flexible</div>
+          <div class="callout-text">You don't need to match patterns exactly. The parser detects intent from keywords — <strong>"Can you add a task called X"</strong> works just as well as <strong>"Add task X"</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: DATE PARSING ══ -->
+    <div class="page" id="page-date-parsing">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        AI Assistant
+        <span class="breadcrumb-sep">›</span>
+        Dates &amp; Times
+      </div>
+      <div class="page-header">
+        <div class="tag">// dates & times</div>
+        <h1 class="page-title">Natural date <em>parsing.</em></h1>
+        <p class="page-desc">TaskFlow understands dates and times the way humans write them. Here's every format that works.</p>
+      </div>
+
+      <h2 class="sh">Date Formats</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Format</th><th>Examples</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Relative keywords</td><td><code>today</code> · <code>tomorrow</code> · <code>yesterday</code></td><td>Resolved to absolute dates at parse time</td></tr>
+            <tr><td>Named days</td><td><code>next Monday</code> · <code>this Friday</code> · <code>next Saturday</code></td><td>"next" always means the following week's day</td></tr>
+            <tr><td>Duration-based</td><td><code>in 3 days</code> · <code>in 2 weeks</code> · <code>in 1 month</code></td><td>Counts from today's date</td></tr>
+            <tr><td>Month + day</td><td><code>May 15</code> · <code>15th May</code> · <code>Jun 3</code></td><td>Assumes current year unless already passed</td></tr>
+            <tr><td>Numeric US</td><td><code>05/15</code> · <code>05/15/2026</code></td><td>MM/DD format</td></tr>
+            <tr><td>ISO</td><td><code>2026-05-28</code></td><td>YYYY-MM-DD, always unambiguous</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="sh">Time Formats</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Format</th><th>Examples</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>12-hour</td><td><code>at 3pm</code> · <code>at 9:30am</code> · <code>at 12:00pm</code></td><td>am/pm required for 12-hour format</td></tr>
+            <tr><td>24-hour</td><td><code>at 14:00</code> · <code>at 09:30</code> · <code>at 23:59</code></td><td>HH:MM, no am/pm needed</td></tr>
+            <tr><td>Special</td><td><code>at noon</code> · <code>at midnight</code></td><td>noon = 12:00pm, midnight = 12:00am</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="sh">Reminder Intervals</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Phrase</th><th>Stored value</th></tr></thead>
+          <tbody>
+            <tr><td><code>remind me 15 minutes before</code></td><td><code>15min</code></td></tr>
+            <tr><td><code>remind me 1 hour before</code></td><td><code>1hour</code></td></tr>
+            <tr><td><code>remind me 1 day before</code></td><td><code>1day</code></td></tr>
+            <tr><td><em>(no reminder phrase)</em></td><td><code>none</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">Reminder requires a due date</div>
+          <div class="callout-text">Reminders only trigger if the task has a due date set. If you add a reminder without a date, it will be stored but never fire.</div>
+        </div>
+      </div>
+
+      <h2 class="sh">Combined Examples</h2>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">natural language</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>Add task "Team sync" due tomorrow at 10am remind me 1 hour before
+Add task "Quarterly review" due next Monday at 9:00am
+Add task "Pay rent" due in 3 days remind me 1 day before
+Add high priority task "Launch prep" due May 30 at 2pm</pre>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: CONTEXT MEMORY ══ -->
+    <div class="page" id="page-context-memory">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        AI Assistant
+        <span class="breadcrumb-sep">›</span>
+        Context Memory
+      </div>
+      <div class="page-header">
+        <div class="tag">// context memory</div>
+        <h1 class="page-title">The AI <em>remembers.</em></h1>
+        <p class="page-desc">Within a conversation thread, the AI tracks what you just talked about — so follow-up commands feel natural.</p>
+      </div>
+
+      <h2 class="sh">What the AI Tracks</h2>
+      <ul class="feat-list">
+        <li><strong>Last mentioned task</strong> — referenced by "it", "that task", "this one"</li>
+        <li><strong>Last listed tasks</strong> — referenced by "#1", "#2", "the first one", "the second task"</li>
+        <li><strong>Last created task</strong> — referenced immediately after creation</li>
+        <li><strong>Active category filter</strong> — remembered for follow-up queries</li>
+      </ul>
+
+      <h2 class="sh">Context Reference Examples</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Reference</th><th>What it resolves to</th></tr></thead>
+          <tbody>
+            <tr><td><code>it</code></td><td>The last task mentioned or created</td></tr>
+            <tr><td><code>that task</code></td><td>Same as "it"</td></tr>
+            <tr><td><code>this one</code></td><td>Same as "it"</td></tr>
+            <tr><td><code>#1</code>, <code>#2</code></td><td>Position in the last listed tasks</td></tr>
+            <tr><td><code>the first one</code></td><td>Position 1 in the last listed tasks</td></tr>
+            <tr><td><code>the second task</code></td><td>Position 2 in the last listed tasks</td></tr>
+            <tr><td><code>the last one</code></td><td>Last item in the last listed tasks</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="sh">Context in Practice</h2>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">conversation</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>You:  Show all overdue tasks
+  ↳  [Lists: 1. Review PRs, 2. Update roadmap, 3. Pay invoice]
+
+You:  Complete #2
+  ↳  ✓ Marked "Update roadmap" as complete
+
+You:  Change priority of #1 to high
+  ↳  ✓ Updated "Review PRs" priority to High
+
+You:  Add task "Follow up on #3"  ← NOTE: #3 here is text, not a reference
+  ↳  ✓ Created "Follow up on #3"
+
+You:  Delete it
+  ↳  ✓ Deleted "Follow up on #3" (the last created task)</pre>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">Context resets on thread switch</div>
+          <div class="callout-text">When you switch to a different conversation thread, the positional context resets. "#1" in a new thread has no meaning until you run a list command.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: TASKS ══ -->
+    <div class="page" id="page-tasks">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Tasks
+      </div>
+      <div class="page-header">
+        <div class="tag">// tasks</div>
+        <h1 class="page-title">Managing your <em>tasks.</em></h1>
+        <p class="page-desc">Tasks are the core of TaskFlow. Every task can have a title, description, priority, category, due date, reminders, and nested subtasks.</p>
+      </div>
+
+      <h2 class="sh">Task Fields</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Title</td><td>Text (required)</td><td>The task name. Keep it concise.</td></tr>
+            <tr><td>Description</td><td>Text (optional)</td><td>Free-form notes about the task</td></tr>
+            <tr><td>Priority</td><td><span class="badge badge-high">high</span> <span class="badge badge-medium">medium</span> <span class="badge badge-low">low</span></td><td>Default: medium</td></tr>
+            <tr><td>Category</td><td>Select</td><td>One of your categories, or uncategorized</td></tr>
+            <tr><td>Due Date</td><td>Date (optional)</td><td>ISO 8601 date string</td></tr>
+            <tr><td>Due Time</td><td>Time HH:MM (optional)</td><td>Requires a due date to be set</td></tr>
+            <tr><td>Reminder</td><td>none / 15min / 1hour / 1day</td><td>Triggers a notification before due</td></tr>
+            <tr><td>Subtasks</td><td>Array of {title, completed}</td><td>Nested checkboxes under a task</td></tr>
+            <tr><td>Status</td><td>pending / completed</td><td>Changed via checkbox or AI command</td></tr>
+            <tr><td>Created At</td><td>ISO timestamp (auto)</td><td>Set automatically on creation</td></tr>
+            <tr><td>Completed At</td><td>ISO timestamp (auto)</td><td>Set when status changes to completed</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Priority Levels</h2>
+      <div class="priority-grid">
+        <div class="priority-card high">
+          <div class="priority-card-name"><span class="badge badge-high">HIGH</span></div>
+          <div class="priority-card-desc">Urgent tasks that need immediate attention. Shown with a red indicator. Surfaces first in sorted views.</div>
+        </div>
+        <div class="priority-card medium">
+          <div class="priority-card-name"><span class="badge badge-medium">MEDIUM</span></div>
+          <div class="priority-card-desc">Standard tasks. Default priority for all new tasks. Orange indicator in task lists.</div>
+        </div>
+        <div class="priority-card low">
+          <div class="priority-card-name"><span class="badge badge-low">LOW</span></div>
+          <div class="priority-card-desc">Nice-to-do tasks without urgency. Green indicator. Sorted last when ordering by priority.</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Subtasks</h2>
+      <p class="body-text">Any task can have multiple subtasks — mini-checkboxes that track progress on a larger goal. Subtasks show a completion counter on the parent task card.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">via AI</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>Add task "Plan team offsite"
+Add subtask "Book venue" to Plan team offsite
+Add subtask "Send invites" to Plan team offsite
+Add subtask "Arrange catering" to Plan team offsite
+Complete subtask "Book venue" of Plan team offsite</pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <div class="callout-title">Subtasks via the UI</div>
+          <div class="callout-text">You can also add subtasks directly from the Task Detail page (<strong>Tasks → click a task title</strong>). Scroll to the Subtasks section and click "Add subtask".</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Filtering &amp; Sorting</h2>
+      <p class="body-text">On the <strong>Tasks page</strong>, use the filter chips to narrow by status, and the sort dropdown to order by:</p>
+      <ul class="feat-list">
+        <li><strong>Due date</strong> — earliest first</li>
+        <li><strong>Priority</strong> — high → medium → low</li>
+        <li><strong>Created date</strong> — newest first</li>
+        <li><strong>Title</strong> — alphabetical</li>
+      </ul>
+      <p class="body-text">Combine a filter chip (e.g., Pending) with a sort (e.g., Priority) to quickly surface what matters most.</p>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: CATEGORIES ══ -->
+    <div class="page" id="page-categories">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Categories
+      </div>
+      <div class="page-header">
+        <div class="tag">// categories</div>
+        <h1 class="page-title">Organizing with <em>categories.</em></h1>
+        <p class="page-desc">Categories let you group tasks by context — work, life, errands. Each gets a color that appears throughout the app.</p>
+      </div>
+
+      <h2 class="sh">Default Categories</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Name</th><th>Color</th><th>Default?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Work</strong></td><td style="color:#60A5FA">Blue</td><td>✓</td></tr>
+            <tr><td><strong>Personal</strong></td><td style="color:#34D399">Green</td><td>✓</td></tr>
+            <tr><td><strong>Shopping</strong></td><td style="color:#F59E0B">Amber</td><td>✓</td></tr>
+            <tr><td><strong>Health</strong></td><td style="color:#F472B6">Pink</td><td>✓</td></tr>
+            <tr><td><strong>Other</strong></td><td style="color:#94A3B8">Slate</td><td>✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body">
+          <div class="callout-title">Default categories cannot be deleted</div>
+          <div class="callout-text">The 5 built-in categories are protected. You can rename them or add new custom categories alongside them.</div>
+        </div>
+      </div>
+
+      <h2 class="sh">Custom Categories</h2>
+      <p class="body-text">Create as many custom categories as you need. Each gets a name and a hex color of your choice.</p>
+
+      <h3 class="sh3">Via the UI</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Go to Categories page</div>
+            <div class="step-desc">Click <strong>Categories</strong> in the sidebar.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Click "Add Category"</div>
+            <div class="step-desc">Enter a name and pick a color from the color picker.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Save</div>
+            <div class="step-desc">The category is instantly available in task forms and AI commands.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sh3">Via the AI</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">AI commands</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre>Create category Finance
+Rename category Finance to Budget
+Delete category Budget
+Show all categories</pre>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">Deleting a category</div>
+          <div class="callout-text">When you delete a category, tasks assigned to it become <strong>uncategorized</strong> — they are not deleted. You can reassign them afterward.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: DASHBOARD ══ -->
+    <div class="page" id="page-dashboard">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Dashboard
+      </div>
+      <div class="page-header">
+        <div class="tag">// dashboard</div>
+        <h1 class="page-title">Your task <em>overview.</em></h1>
+        <p class="page-desc">The Dashboard is the home screen — a real-time summary of everything happening across your tasks.</p>
+      </div>
+
+      <h2 class="sh">Stats Cards</h2>
+      <div class="table-wrap">
+        <table class="ref-table">
+          <thead><tr><th>Card</th><th>What it shows</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Total</strong></td><td>All tasks, regardless of status</td></tr>
+            <tr><td><strong>Completed</strong></td><td>Tasks with status = completed</td></tr>
+            <tr><td><strong>Pending</strong></td><td>Tasks with status = pending and not overdue</td></tr>
+            <tr><td><strong>Overdue</strong></td><td>Pending tasks where due date is before today</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="sh">Quick-Add Form</h2>
+      <p class="body-text">The Dashboard has a quick-add form for creating tasks without leaving the home screen. It supports: title, category, priority, and due date. For advanced options (description, time, reminders, subtasks), use the full <strong>New Task</strong> form at <code>/tasks/new</code>.</p>
+
+      <h2 class="sh">Recent Pending Tasks</h2>
+      <p class="body-text">Below the stats cards, the Dashboard shows your most recently added pending tasks. Click any task title to open its detail view, or use the checkbox to mark it complete inline.</p>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: REMINDERS ══ -->
+    <div class="page" id="page-reminders">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Reminders
+      </div>
+      <div class="page-header">
+        <div class="tag">// reminders</div>
+        <h1 class="page-title">Never miss a <em>deadline.</em></h1>
+        <p class="page-desc">Set reminders on tasks and TaskFlow will notify you before the due time arrives.</p>
+      </div>
+
+      <h2 class="sh">How Reminders Work</h2>
+      <p class="body-text">Reminders use the browser's built-in notification system. When a task's reminder time passes, a <strong>toast notification</strong> appears in the bottom corner. The app periodically checks for due reminders while it's open in your browser.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body">
+          <div class="callout-title">Browser must be open</div>
+          <div class="callout-text">Since TaskFlow is a client-side app with no background service, reminders only fire when the app tab is open and active.</div>
+        </div>
+      </div>
+
+      <h2 class="sh">Available Intervals</h2>
+      <ul class="feat-list">
+        <li><strong>15 minutes before</strong> — good for meetings and tight deadlines</li>
+        <li><strong>1 hour before</strong> — preparation reminders</li>
+        <li><strong>1 day before</strong> — planning ahead for tomorrow's tasks</li>
+      </ul>
+
+      <h2 class="sh">Setting a Reminder</h2>
+      <h3 class="sh3">Via AI</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">AI commands</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre>Add task "Doctor appointment" due tomorrow at 3pm remind me 1 hour before
+Add task "Submit expenses" due Friday remind me 1 day before</pre>
+      </div>
+
+      <h3 class="sh3">Via the UI</h3>
+      <p class="body-text">When creating or editing a task, find the <strong>Reminder</strong> dropdown in the task form. Select your preferred interval. The field is only active when a due date is set.</p>
+
+      <h2 class="sh">Overdue Notifications</h2>
+      <p class="body-text">Even without an explicit reminder, TaskFlow tracks overdue tasks. Any pending task whose due date has passed appears highlighted in red on the Tasks page, and counted in the Dashboard's <strong>Overdue</strong> stat card.</p>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: FAQ ══ -->
+    <div class="page" id="page-faq">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        FAQ
+      </div>
+      <div class="page-header">
+        <div class="tag">// faq</div>
+        <h1 class="page-title">Frequently asked <em>questions.</em></h1>
+        <p class="page-desc">Quick answers to the most common questions about TaskFlow.</p>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is my data private? Does it go to a server?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Completely private. TaskFlow stores everything in your browser's <code>localStorage</code>. No data is ever sent to any server — there isn't one. Your tasks stay on your device and are only visible to you.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">What happens if I clear my browser data?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">All your tasks, categories, and AI conversation threads will be lost, as they are stored in localStorage. There is no cloud backup. If you need to preserve your data, consider exporting it before clearing browser storage.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Does the AI use ChatGPT or any external AI service?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">No. TaskFlow's AI assistant is a <strong>custom-built NLP engine</strong> that runs entirely in your browser. It uses regex-based pattern matching and keyword intent detection — no API calls, no external dependencies, no network required after the initial page load.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Can I use TaskFlow offline?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Yes, once the app has loaded. Since everything runs client-side and data is stored in localStorage, TaskFlow is fully functional without an internet connection. The only thing that requires a connection is the initial app load (fetching JS/CSS bundles) and loading Google Fonts.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">The AI said "I didn't understand that." What should I do?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">The parser works best with clear action words. Instead of questions like <em>"Can you maybe add…"</em>, try direct commands: <em>"Add task…"</em>. You can also type <code>help</code> to see all supported command patterns. If a specific phrasing consistently fails, try a synonym — <em>"create"</em> works as well as <em>"add"</em>.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Can I access TaskFlow from multiple devices?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Not in the current version. Since data is stored in each browser's localStorage, your tasks on one device are not visible on another. Each browser instance maintains its own separate task database.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How do I recover a task I accidentally deleted?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Unfortunately, deleted tasks cannot be recovered. There is no trash or undo history. Deletion is permanent. Always confirm task names before issuing a delete command to the AI.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Can the AI create multiple tasks at once?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">The current parser handles one intent per message. To create multiple tasks, send separate commands — one per message. Each command is processed independently, and the AI will confirm each creation.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How do I add a task with a long description?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">The AI's <code>CREATE_TASK</code> command focuses on the task title, priority, date, and category. For tasks that need a long description, create the task via AI first, then click into the task from the Tasks page and edit the description field directly in the Task Form.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is there a keyboard shortcut to open the AI chat?<span class="faq-chevron">▾</span></div>
+        <div class="faq-a">In the current version, the AI assistant is opened by clicking the floating ⚡ button in the bottom-right corner of the screen. Keyboard shortcuts for the AI panel are on the feature roadmap.</div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: TROUBLESHOOTING ══ -->
+    <div class="page" id="page-troubleshooting">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Troubleshooting
+      </div>
+      <div class="page-header">
+        <div class="tag">// troubleshooting</div>
+        <h1 class="page-title">Something not <em>working?</em></h1>
+        <p class="page-desc">Common issues and how to resolve them.</p>
+      </div>
+
+      <h2 class="sh">AI Assistant Issues</h2>
+
+      <h3 class="sh3">AI doesn't respond</h3>
+      <p class="body-text">Make sure the chat panel is fully open and you're pressing Enter or clicking the send button. If the input field appears frozen, try refreshing the page — conversation history is preserved in localStorage.</p>
+
+      <h3 class="sh3">AI creates the wrong task</h3>
+      <p class="body-text">The parser extracts the task title from everything between quotes or after the action keyword. Wrapping titles in quotes gives the most reliable results:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">recommended</span></div>
+        <pre>Add task "Buy fresh coffee beans" due tomorrow    ← quoted title</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">less reliable</span></div>
+        <pre>Add task Buy fresh coffee beans due tomorrow      ← ambiguous</pre>
+      </div>
+
+      <h3 class="sh3">Date not parsed correctly</h3>
+      <p class="body-text">Some ambiguous phrases may not resolve as expected. Use ISO format (<code>2026-05-28</code>) for guaranteed accuracy, or check the <a onclick="navigate('date-parsing')" href="#" style="color:var(--accent)">Date Parsing reference</a>.</p>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Data Issues</h2>
+
+      <h3 class="sh3">Tasks disappeared after browser update</h3>
+      <p class="body-text">Some browser updates or privacy settings clear localStorage. Check your browser's site data settings for <code>localhost</code>. If the data is gone, it cannot be recovered — this is a known limitation of localStorage-only persistence.</p>
+
+      <h3 class="sh3">App looks broken or styles are missing</h3>
+      <p class="body-text">This usually means the Vite dev server isn't running, or the built assets aren't being served correctly. Ensure <code>npm run dev</code> (development) or <code>npm run build && npm run preview</code> (production) is running.</p>
+
+      <div class="callout callout-danger">
+        <div class="callout-icon">🚫</div>
+        <div class="callout-body">
+          <div class="callout-title">Opening index.html directly won't work</div>
+          <div class="callout-text">TaskFlow uses ES modules and a Vite dev server. You cannot open <code>index.html</code> directly as a file:// URL — it must be served via <code>npm run dev</code>.</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <h2 class="sh">Reset &amp; Clear Data</h2>
+      <p class="body-text">To fully reset TaskFlow, open your browser's DevTools (<code>F12</code>), go to <strong>Application → Storage → Local Storage → localhost</strong>, and delete the following keys:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">localStorage keys</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre>todo_app_tasks
+todo_app_categories
+todo_app_notifications</pre>
+      </div>
+      <p class="body-text">After deleting these, refresh the page. TaskFlow will reinitialize with the 5 default categories and no tasks.</p>
+    </div>
+
+
+    <!-- ══════════════════════ PAGE: CHANGELOG ══ -->
+    <div class="page" id="page-changelog">
+      <div class="breadcrumb">
+        <a onclick="navigate('home')" href="#">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        Changelog
+      </div>
+      <div class="page-header">
+        <div class="tag">// changelog</div>
+        <h1 class="page-title">What's <em>changed.</em></h1>
+        <p class="page-desc">A full history of releases, features, and fixes.</p>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v1.0.0 <span class="badge badge-new">latest</span></div>
+        <div class="changelog-date">Initial release · May 2026</div>
+
+        <div class="changelog-section-label new">New Features</div>
+        <ul class="changelog-list">
+          <li><strong>AI Task Assistant</strong> — full conversational interface with 15+ intent types</li>
+          <li><strong>Natural language date parsing</strong> — relative, named, duration, and absolute formats</li>
+          <li><strong>Multi-thread AI conversations</strong> — create, rename, switch, and delete threads</li>
+          <li><strong>Context memory</strong> — positional references (#1, "it", "the first one")</li>
+          <li><strong>Task management</strong> — full CRUD with priorities, due dates, times, reminders</li>
+          <li><strong>Subtasks</strong> — nested checkboxes with completion tracking</li>
+          <li><strong>Categories</strong> — 5 default plus unlimited custom with color picker</li>
+          <li><strong>Dashboard</strong> — live stats (total, completed, pending, overdue)</li>
+          <li><strong>Task filtering &amp; sorting</strong> — filter by status, sort by date/priority/title</li>
+          <li><strong>Reminder system</strong> — 15 min, 1 hour, or 1 day before due</li>
+          <li><strong>Overdue detection</strong> — automatic flagging of past-due pending tasks</li>
+          <li><strong>Notifications</strong> — toast notifications for reminders and completions</li>
+          <li><strong>localStorage persistence</strong> — all data survives page refreshes</li>
+          <li><strong>Seed data utility</strong> — <code>window.seedData()</code> for development/demo</li>
+        </ul>
+
+        <div class="changelog-section-label improved">Tech Stack</div>
+        <ul class="changelog-list">
+          <li>React 18.2 with TypeScript 5</li>
+          <li>Vite 4.4 build tooling</li>
+          <li>React Router v7 for client-side routing</li>
+          <li>Tailwind CSS 3.4 for styling</li>
+          <li>Lucide React for icons</li>
+          <li>UUID v13 for entity IDs</li>
+          <li>Context API + useReducer for global state</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Back to top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+  // ═══════════════════════ NAVIGATION ═══════════════════════
+  const pages = document.querySelectorAll('.page');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const pageMap = {
+    'home':             { nav: 0, title: 'Home' },
+    'getting-started':  { nav: 1, title: 'Getting Started' },
+    'ai-overview':      { nav: 2, title: 'How It Works' },
+    'command-reference':{ nav: 3, title: 'Command Reference' },
+    'date-parsing':     { nav: 4, title: 'Dates & Times' },
+    'context-memory':   { nav: 5, title: 'Context Memory' },
+    'tasks':            { nav: 6, title: 'Tasks' },
+    'categories':       { nav: 7, title: 'Categories' },
+    'dashboard':        { nav: 8, title: 'Dashboard' },
+    'reminders':        { nav: 9, title: 'Reminders' },
+    'faq':              { nav: 10, title: 'FAQ' },
+    'troubleshooting':  { nav: 11, title: 'Troubleshooting' },
+    'changelog':        { nav: 12, title: 'Changelog' },
+  };
+
+  function navigate(pageId) {
+    // hide all pages
+    pages.forEach(p => p.classList.remove('active'));
+    navItems.forEach(n => n.classList.remove('active'));
+
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+
+    const info = pageMap[pageId];
+    if (info) navItems[info.nav]?.classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    closeSearchResults();
+    closeSidebar();
+  }
+
+  // ═══════════════════════ SEARCH ═══════════════════════
+  const searchIndex = [
+    { id: 'home',              icon: '🏠', title: 'Home',              section: 'Getting Started', keywords: 'overview what is taskflow' },
+    { id: 'getting-started',   icon: '🚀', title: 'Getting Started',   section: 'Start here',      keywords: 'quick start install setup first task interface' },
+    { id: 'ai-overview',       icon: '🤖', title: 'How the AI Works',  section: 'AI Assistant',    keywords: 'parser executor architecture intents nlu nlp' },
+    { id: 'command-reference', icon: '📋', title: 'Command Reference', section: 'AI Assistant',    keywords: 'commands add create delete complete update list show stats help category' },
+    { id: 'date-parsing',      icon: '📅', title: 'Dates & Times',     section: 'AI Assistant',    keywords: 'tomorrow today next week in 3 days monday date time reminder parsing' },
+    { id: 'context-memory',    icon: '🧠', title: 'Context Memory',    section: 'AI Assistant',    keywords: 'it first one #1 positional reference thread context' },
+    { id: 'tasks',             icon: '✓',  title: 'Tasks Guide',       section: 'Features',        keywords: 'task fields priority high medium low subtasks due date create edit delete filter sort' },
+    { id: 'categories',        icon: '🏷️', title: 'Categories',        section: 'Features',        keywords: 'category work personal shopping health color custom create rename delete' },
+    { id: 'dashboard',         icon: '📊', title: 'Dashboard',         section: 'Features',        keywords: 'stats total completed pending overdue quick add recent' },
+    { id: 'reminders',         icon: '🔔', title: 'Reminders',         section: 'Features',        keywords: '15 minutes 1 hour 1 day before notification alert overdue' },
+    { id: 'faq',               icon: '❓', title: 'FAQ',               section: 'Reference',       keywords: 'frequently asked questions private offline data deleted ai' },
+    { id: 'troubleshooting',   icon: '🔧', title: 'Troubleshooting',   section: 'Reference',       keywords: 'fix broken reset clear data localStorage bug problem issue' },
+    { id: 'changelog',         icon: '📝', title: 'Changelog',         section: 'Reference',       keywords: 'v1.0 release new features whats new history' },
+  ];
+
+  const searchInput = document.getElementById('search-input');
+  const resultsEl = document.getElementById('search-results');
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (!q) { closeSearchResults(); return; }
+
+    const matches = searchIndex.filter(item =>
+      item.title.toLowerCase().includes(q) ||
+      item.keywords.toLowerCase().includes(q) ||
+      item.section.toLowerCase().includes(q)
+    ).slice(0, 6);
+
+    if (matches.length === 0) {
+      resultsEl.innerHTML = `<div class="sr-header">Results</div><div class="sr-no-results">No results for "${q}"</div>`;
+    } else {
+      resultsEl.innerHTML =
+        `<div class="sr-header">${matches.length} result${matches.length > 1 ? 's' : ''}</div>` +
+        matches.map(m => `
+          <div class="sr-item" onclick="navigate('${m.id}'); searchInput.value=''">
+            <span class="sr-icon">${m.icon}</span>
+            <div>
+              <div class="sr-title">${m.title}</div>
+              <div class="sr-section">${m.section}</div>
+            </div>
+          </div>
+        `).join('');
+    }
+    resultsEl.classList.add('visible');
+  });
+
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeSearchResults(); searchInput.blur(); }
+  });
+
+  document.addEventListener('click', e => {
+    if (!resultsEl.contains(e.target) && e.target !== searchInput) closeSearchResults();
+  });
+
+  function closeSearchResults() {
+    resultsEl.classList.remove('visible');
+  }
+
+  // ═══════════════════════ FAQ ═══════════════════════
+  function toggleFaq(el) {
+    el.classList.toggle('open');
+  }
+
+  // ═══════════════════════ COPY CODE ═══════════════════════
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // ═══════════════════════ MOBILE SIDEBAR ═══════════════════════
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const hamburger = document.getElementById('hamburger');
+
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('visible');
+  });
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('visible');
+  }
+
+  // ═══════════════════════ BACK TO TOP ═══════════════════════
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // ═══════════════════════ HASH ROUTING ═══════════════════════
+  function handleHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && pageMap[hash]) navigate(hash);
+  }
+  window.addEventListener('hashchange', handleHash);
+  handleHash();
+</script>
+</body>
+</html>
